@@ -1,6 +1,7 @@
 package com.talhakoc.main;
 
 import com.talhakoc.kitap.Kitaplar;
+import com.talhakoc.sistem.KutuphaneSistemi;
 import com.talhakoc.uye.Uyeler;
 import com.talhakoc.veritabani.VeriTabani;
 
@@ -20,9 +21,9 @@ public class Main {
                 "Seçiminiz: ");
         int deger = oku.nextInt();
          switch (deger) {
-                case 1: break;
-                case 2: Kitaplar.kitapListele(); break;
-                case 3: Uyeler.uyeEkle(6,"Derya Deniz"); break;
+                case 1: KutuphaneSistemi.kitaplariEkleme(); break;
+                case 2: KutuphaneSistemi.kitaplariListele(); break;
+                case 3: KutuphaneSistemi.uyeleriEkleme(); break;
                 case 4: break;
                 case 5: break;
                 case 6: break;

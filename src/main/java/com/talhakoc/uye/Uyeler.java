@@ -16,7 +16,7 @@ public class Uyeler {
                 ResultSet rs = stmt.executeQuery("SELECT * from kitaplar");
 
                 while (rs.next()) {
-                    int id = rs.getInt("uye_id");
+                    String id = rs.getString("uye_id");
                     String adi = rs.getString("uye_adi");
                     System.out.println(id + "-" + adi  + "-" );
                 }
@@ -32,19 +32,19 @@ public class Uyeler {
         }
     }
 
-    public static void uyeEkle(int uye_id, String uye_adi) {
-        String sql = "INSERT INTO uyeler (uye_id, uye_adi) VALUES (?, ?)";
+    public static void uyeEkle(String uye_adi) {
+        String sql = "INSERT INTO uyeler ( uye_adi) VALUES ( ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-            pstmt.setInt(1, uye_id);  // ilk ? yerine kitap adı
-            pstmt.setString(2, uye_adi);     // ikinci ? yerine yazar adı
+
+            pstmt.setString(1, uye_adi);
 
             int etkilenenSatir = pstmt.executeUpdate();
 
             if (etkilenenSatir > 0) {
-                System.out.println("Yeni üye eklendi: " + uye_id + " (" + uye_adi + ")");
+                System.out.println("Yeni üye eklendi: "  + " (" + uye_adi + ")");
             }
 
         } catch (SQLException e) {
