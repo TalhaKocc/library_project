@@ -4,7 +4,7 @@ import com.talhakoc.system.LibrarySystem;
 
 import java.util.Scanner;
 
-public class Main {
+public class Main extends LibrarySystem {
     public static void main(String[] args) {
         System.out.println("******** Kütüphane Sistemine Hoşgeldiniz *******");
         Scanner print = new Scanner(System.in);

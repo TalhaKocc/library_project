@@ -19,7 +19,7 @@ public class LibrarySystem {
         String bookAuthorAdd = input.nextLine();
         System.out.println("Kitap Durumu Giriniz");
         String bookStatusAdd = input.nextLine();
-        Books.bookAdd(bookNameAdd,bookAuthorAdd,bookStatusAdd);
+        Books.bookAdd(bookNameAdd,bookAuthorAdd);
     }
 
     public static void booksBorrowing(){
@@ -41,7 +41,7 @@ public class LibrarySystem {
     }
 
 
-    public static void membersAdd(){
+    public static void membersAdd() {
         Scanner input = new Scanner(System.in);
         System.out.println("Üye Adı Giriniz");
         String memberAdd = input.nextLine();

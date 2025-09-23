@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import static com.talhakoc.database.DataBase.getConnection;
 
+
 public class Books {
 
     public static void bookList() {
@@ -35,7 +36,7 @@ public class Books {
         }
     }
 
-    public static void bookAdd(String book_name,String book_author,String book_status) {
+    public static void bookAdd(String book_name,String book_author) {
         String sql = "INSERT INTO books (book_name,book_author,book_status) VALUES ( ?,?,?)";
 
         try (Connection connection = getConnection();
@@ -44,12 +45,12 @@ public class Books {
 
             pstmt.setString(1, book_name);
             pstmt.setString(2, book_author);
-            pstmt.setString(3, book_status);
+            pstmt.setString(3,"Müsait");
 
             int effectedLine = pstmt.executeUpdate();
 
             if (effectedLine > 0) {
-                System.out.println("Yeni kitap eklendi " + book_name + "-" + book_author + "-" + book_status);
+                System.out.println("Yeni kitap eklendi " + book_name + "-" + book_author + "-" );
             }
 
         } catch (SQLException e) {
@@ -163,3 +164,6 @@ public class Books {
     }
 
 }
+
+
+

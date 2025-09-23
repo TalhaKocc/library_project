@@ -1,10 +1,13 @@
 package com.talhakoc.member;
 
+import com.talhakoc.database.DataBase;
+
 import java.sql.*;
 
-import static com.talhakoc.database.DataBase.getConnection;
 
-public class Members {
+
+public class Members extends DataBase {
+
     public static void membersAdd(String member_name) {
         String sql = "INSERT INTO members (member_name) VALUES (?)";
 
@@ -24,5 +27,6 @@ public class Members {
             e.printStackTrace();
         }
     }
+
 
 }
