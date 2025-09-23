@@ -3,6 +3,7 @@ package com.talhakoc.kitap;
 import com.talhakoc.veritabani.VeriTabani;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 import static com.talhakoc.veritabani.VeriTabani.getConnection;
 
@@ -56,6 +57,109 @@ public class Kitaplar {
         }
     }
 
+    public static void  kitapOduncAl(String kitapAdi, String uyeAdi) {
+        String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
+        String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
+        String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Ödünç' WHERE kitap_id = ?";
+        String sqlInsertOdunc = "INSERT INTO kitap_durumu (kitap_id, uye_id, odunc_tarihi) VALUES (?, ?, ?)";
 
+        try (Connection connection = VeriTabani.getConnection()) {
+            // 1️⃣ Kitap ve durumu
+            PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
+            psKitap.setString(1, kitapAdi);
+            ResultSet rsKitap = psKitap.executeQuery();
+
+            if (rsKitap.next()) {
+                int kitapId = rsKitap.getInt("kitap_id");
+                String durum = rsKitap.getString("kitap_durumu");
+
+                if (durum.equals("Müsait")) {
+                    // 2️⃣ Üye id
+                    PreparedStatement psUye = connection.prepareStatement(sqlUye);
+                    psUye.setString(1, uyeAdi);
+                    ResultSet rsUye = psUye.executeQuery();
+
+                    if (rsUye.next()) {
+                        int uyeId = rsUye.getInt("uye_id");
+
+                        // 3️⃣ Kitap durumu güncelle
+                        PreparedStatement psGuncelle = connection.prepareStatement(sqlGuncelleKitap);
+                        psGuncelle.setInt(1, kitapId);
+                        psGuncelle.executeUpdate();
+
+                        // 4️⃣ Odunc tablosuna ekle
+                        PreparedStatement psOdunc = connection.prepareStatement(sqlInsertOdunc);
+                        psOdunc.setInt(1, kitapId);
+                        psOdunc.setInt(2, uyeId);
+                        psOdunc.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                        psOdunc.executeUpdate();
+
+                        System.out.println("Kitap ödünç alındı: " + kitapAdi);
+                    } else {
+                        System.out.println("Üye bulunamadı: " + uyeAdi);
+                    }
+                } else {
+                    System.out.println("Kitap ödünç durumda: " + kitapAdi);
+                }
+            } else {
+                System.out.println("Kitap bulunamadı: " + kitapAdi);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void kitapİadeAlma(String kitapAdi, String uyeAdi) {
+        String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
+        String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
+        String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Müsait' WHERE kitap_id = ?";
+        String sqlDeleteOdunc = "DELETE FROM kitap_durumu WHERE kitap_id = ? AND uye_id = ?";
+
+        try (Connection connection = VeriTabani.getConnection()) {
+            // Kitap id ve durumu
+            PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
+            psKitap.setString(1, kitapAdi);
+            ResultSet rsKitap = psKitap.executeQuery();
+
+            if (rsKitap.next()) {
+                int kitapId = rsKitap.getInt("kitap_id");
+                String durum = rsKitap.getString("kitap_durumu");
+
+                if (durum.equals("Ödünç")) {
+                    // Üye id
+                    PreparedStatement psUye = connection.prepareStatement(sqlUye);
+                    psUye.setString(1, uyeAdi);
+                    ResultSet rsUye = psUye.executeQuery();
+
+                    if (rsUye.next()) {
+                        int uyeId = rsUye.getInt("uye_id");
+
+                        // Kitap durumu güncelle
+                        PreparedStatement psGuncelle = connection.prepareStatement(sqlGuncelleKitap);
+                        psGuncelle.setInt(1, kitapId);
+                        psGuncelle.executeUpdate();
+
+                        // Odunc tablosundan sil
+                        PreparedStatement psDelete = connection.prepareStatement(sqlDeleteOdunc);
+                        psDelete.setInt(1, kitapId);
+                        psDelete.setInt(2, uyeId);
+                        psDelete.executeUpdate();
+
+                        System.out.println("Kitap geri alındı: " + kitapAdi);
+                    } else {
+                        System.out.println("Üye bulunamadı: " + uyeAdi);
+                    }
+                } else {
+                    System.out.println("Kitap zaten müsait: " + kitapAdi);
+                }
+            } else {
+                System.out.println("Kitap bulunamadı: " + kitapAdi);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

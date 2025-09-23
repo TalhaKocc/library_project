@@ -24,6 +24,25 @@ public class KutuphaneSistemi {
         Kitaplar.kitapEkle(kitapAdiEkle,kitapYazariEkle,kitapDurumEkle);
     }
 
+    public static void kitapOduncAlma(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Kitap Adı Giriniz");
+        String kitapAdiGiriniz = input.nextLine();
+        System.out.println("Üye Adı Giriniz");
+        String uyeAdiGiriniz = input.nextLine();
+        Kitaplar.kitapOduncAl(kitapAdiGiriniz,uyeAdiGiriniz);
+    }
+
+    public static void kitapGeriVerme(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Kitap Adı Giriniz");
+        String iadeKitapAdi = input.nextLine();
+        System.out.println("Üye Adı Giriniz");
+        String iadeUyeAdi = input.nextLine();
+        Kitaplar.kitapİadeAlma(iadeKitapAdi,iadeUyeAdi);
+    }
+
+
     public static void uyeleriEkleme(){
         Scanner input = new Scanner(System.in);
         System.out.println("Üye Adı Giriniz");
