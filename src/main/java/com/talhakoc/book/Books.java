@@ -15,13 +15,13 @@ public class Books {
         if (connection != null) {
             try {
                 Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * from kitaplar");
+                ResultSet rs = stmt.executeQuery("SELECT * from books");
 
                 while (rs.next()) {
-                    int id = rs.getInt("kitap_id");
-                    String adi = rs.getString("kitap_adi");
-                    String durum = rs.getString("kitap_durumu");
-                    System.out.println(id + "-" + adi  + "-" + durum);
+                    int id = rs.getInt("book_id");
+                    String name = rs.getString("book_name");
+                    String status = rs.getString("book_status");
+                    System.out.println(id + "-" + name  + "-" + status);
                 }
                 stmt.close();
                 rs.close();
@@ -35,21 +35,21 @@ public class Books {
         }
     }
 
-    public static void bookAdd(String kitap_adi,String kitap_yazari,String kitap_durumu) {
-        String sql = "INSERT INTO kitaplar (kitap_adi,kitap_yazari,kitap_durumu) VALUES ( ?,?,?)";
+    public static void bookAdd(String book_name,String book_author,String book_status) {
+        String sql = "INSERT INTO books (book_name,book_author,book_status) VALUES ( ?,?,?)";
 
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
 
-            pstmt.setString(1, kitap_adi);
-            pstmt.setString(2, kitap_yazari);
-            pstmt.setString(3, kitap_durumu);
+            pstmt.setString(1, book_name);
+            pstmt.setString(2, book_author);
+            pstmt.setString(3, book_status);
 
-            int etkilenenSatir = pstmt.executeUpdate();
+            int effectedLine = pstmt.executeUpdate();
 
-            if (etkilenenSatir > 0) {
-                System.out.println("Yeni kitap eklendi " + kitap_adi + "-" + kitap_yazari + "-" + kitap_durumu);
+            if (effectedLine > 0) {
+                System.out.println("Yeni kitap eklendi " + book_name + "-" + book_author + "-" + book_status);
             }
 
         } catch (SQLException e) {
@@ -57,52 +57,52 @@ public class Books {
         }
     }
 
-    public static void  bookBorrow(String kitapAdi, String uyeAdi) {
-        String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
-        String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
-        String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Ödünç' WHERE kitap_id = ?";
-        String sqlInsertOdunc = "INSERT INTO kitap_durumu (kitap_id, uye_id, odunc_tarihi) VALUES (?, ?, ?)";
+    public static void  bookBorrow(String bookName, String memberName) {
+        String sqlBook = "SELECT book_id, book_status FROM books WHERE book_name = ?";
+        String sqlMembers = "SELECT member_id FROM members WHERE member_name = ?";
+        String sqlUpdateBooks = "UPDATE books SET book_status = 'Ödünç' WHERE book_id = ?";
+        String sqlInsertBooks = "INSERT INTO books_status (book_id, member_id, status_date) VALUES (?, ?, ?)";
 
         try (Connection connection = DataBase.getConnection()) {
-            // 1️⃣ Kitap ve durumu
-            PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
-            psKitap.setString(1, kitapAdi);
-            ResultSet rsKitap = psKitap.executeQuery();
 
-            if (rsKitap.next()) {
-                int kitapId = rsKitap.getInt("kitap_id");
-                String durum = rsKitap.getString("kitap_durumu");
+            PreparedStatement psBook = connection.prepareStatement(sqlBook);
+            psBook.setString(1, bookName);
+            ResultSet rsBook = psBook.executeQuery();
 
-                if (durum.equals("Müsait")) {
-                    // 2️⃣ Üye id
-                    PreparedStatement psUye = connection.prepareStatement(sqlUye);
-                    psUye.setString(1, uyeAdi);
-                    ResultSet rsUye = psUye.executeQuery();
+            if (rsBook.next()) {
+                int bookId = rsBook.getInt("book_id");
+                String status = rsBook.getString("book_status");
 
-                    if (rsUye.next()) {
-                        int uyeId = rsUye.getInt("uye_id");
+                if (status.equals("Müsait")) {
 
-                        // 3️⃣ Kitap durumu güncelle
-                        PreparedStatement psGuncelle = connection.prepareStatement(sqlGuncelleKitap);
-                        psGuncelle.setInt(1, kitapId);
-                        psGuncelle.executeUpdate();
+                    PreparedStatement psMember = connection.prepareStatement(sqlMembers);
+                    psMember.setString(1, memberName);
+                    ResultSet rsMember = psMember.executeQuery();
 
-                        // 4️⃣ Odunc tablosuna ekle
-                        PreparedStatement psOdunc = connection.prepareStatement(sqlInsertOdunc);
-                        psOdunc.setInt(1, kitapId);
-                        psOdunc.setInt(2, uyeId);
-                        psOdunc.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
-                        psOdunc.executeUpdate();
+                    if (rsMember.next()) {
+                        int memberId = rsMember.getInt("member_id");
 
-                        System.out.println("Kitap ödünç alındı: " + kitapAdi);
+
+                        PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBooks);
+                        psUpdate.setInt(1, bookId);
+                        psUpdate.executeUpdate();
+
+
+                        PreparedStatement psBorrow = connection.prepareStatement(sqlInsertBooks);
+                        psBorrow.setInt(1, bookId);
+                        psBorrow.setInt(2, memberId);
+                        psBorrow.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                        psBorrow.executeUpdate();
+
+                        System.out.println("Kitap ödünç alındı: " + bookName);
                     } else {
-                        System.out.println("Üye bulunamadı: " + uyeAdi);
+                        System.out.println("Üye bulunamadı: " + memberName);
                     }
                 } else {
-                    System.out.println("Kitap ödünç durumda: " + kitapAdi);
+                    System.out.println("Kitap ödünç durumda: " + bookName);
                 }
             } else {
-                System.out.println("Kitap bulunamadı: " + kitapAdi);
+                System.out.println("Kitap bulunamadı: " + bookName);
             }
 
         } catch (SQLException e) {
@@ -110,51 +110,51 @@ public class Books {
         }
     }
 
-    public static void bookReturn(String kitapAdi, String uyeAdi) {
-        String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
-        String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
-        String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Müsait' WHERE kitap_id = ?";
-        String sqlDeleteOdunc = "DELETE FROM kitap_durumu WHERE kitap_id = ? AND uye_id = ?";
+    public static void bookReturn(String bookName, String memberName) {
+        String sqlBook = "SELECT book_id, book_status FROM books WHERE book_name = ?";
+        String sqlMember = "SELECT member_id FROM members WHERE member_name = ?";
+        String sqlUpdateBook = "UPDATE books SET book_status = 'Müsait' WHERE book_id = ?";
+        String sqlDeleteBorrowBook = "DELETE FROM books_status WHERE book_id = ? AND member_id = ?";
 
         try (Connection connection = DataBase.getConnection()) {
-            // Kitap id ve durumu
-            PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
-            psKitap.setString(1, kitapAdi);
-            ResultSet rsKitap = psKitap.executeQuery();
 
-            if (rsKitap.next()) {
-                int kitapId = rsKitap.getInt("kitap_id");
-                String durum = rsKitap.getString("kitap_durumu");
+            PreparedStatement psBook = connection.prepareStatement(sqlBook);
+            psBook.setString(1, bookName);
+            ResultSet rsBook = psBook.executeQuery();
 
-                if (durum.equals("Ödünç")) {
-                    // Üye id
-                    PreparedStatement psUye = connection.prepareStatement(sqlUye);
-                    psUye.setString(1, uyeAdi);
-                    ResultSet rsUye = psUye.executeQuery();
+            if (rsBook.next()) {
+                int bookId = rsBook.getInt("book_id");
+                String status = rsBook.getString("book_status");
 
-                    if (rsUye.next()) {
-                        int uyeId = rsUye.getInt("uye_id");
+                if (status.equals("Ödünç")) {
 
-                        // Kitap durumu güncelle
-                        PreparedStatement psGuncelle = connection.prepareStatement(sqlGuncelleKitap);
-                        psGuncelle.setInt(1, kitapId);
-                        psGuncelle.executeUpdate();
+                    PreparedStatement psMember = connection.prepareStatement(sqlMember);
+                    psMember.setString(1, memberName);
+                    ResultSet rsMember = psMember.executeQuery();
 
-                        // Odunc tablosundan sil
-                        PreparedStatement psDelete = connection.prepareStatement(sqlDeleteOdunc);
-                        psDelete.setInt(1, kitapId);
+                    if (rsMember.next()) {
+                        int uyeId = rsMember.getInt("member_id");
+
+
+                        PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBook);
+                        psUpdate.setInt(1, bookId);
+                        psUpdate.executeUpdate();
+
+
+                        PreparedStatement psDelete = connection.prepareStatement(sqlDeleteBorrowBook);
+                        psDelete.setInt(1, bookId);
                         psDelete.setInt(2, uyeId);
                         psDelete.executeUpdate();
 
-                        System.out.println("Kitap geri alındı: " + kitapAdi);
+                        System.out.println("Kitap geri alındı: " + bookName);
                     } else {
-                        System.out.println("Üye bulunamadı: " + uyeAdi);
+                        System.out.println("Üye bulunamadı: " + memberName);
                     }
                 } else {
-                    System.out.println("Kitap zaten müsait: " + kitapAdi);
+                    System.out.println("Kitap zaten müsait: " + bookName);
                 }
             } else {
-                System.out.println("Kitap bulunamadı: " + kitapAdi);
+                System.out.println("Kitap bulunamadı: " + bookName);
             }
 
         } catch (SQLException e) {
