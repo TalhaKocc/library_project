@@ -1,20 +1,16 @@
 package com.talhakoc.main;
 
-import com.talhakoc.kitap.Kitaplar;
-import com.talhakoc.sistem.KutuphaneSistemi;
-import com.talhakoc.uye.Uyeler;
-import com.talhakoc.veritabani.VeriTabani;
+import com.talhakoc.system.LibrarySystem;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("******** Kütüphane Sistemine Hoşgeldiniz *******");
-        Scanner oku = new Scanner(System.in);
-        int deger = 0;
+        Scanner print = new Scanner(System.in);
+        int value = 0;
 
-      while (deger !=6) {
+      while (value !=6) {
 
           System.out.print("1- Kitap Ekle\n" +
                   "2- Kitapları Listele\n" +
@@ -23,13 +19,13 @@ public class Main {
                   "5- Kitap İade Et\n" +
                   "6- Çıkış\n" +
                   "Seçiminiz: ");
-          deger = oku.nextInt();
-          switch (deger) {
-              case 1: KutuphaneSistemi.kitaplariEkleme(); break;
-              case 2: KutuphaneSistemi.kitaplariListele(); break;
-              case 3: KutuphaneSistemi.uyeleriEkleme(); break;
-              case 4: KutuphaneSistemi.kitapOduncAlma(); break;
-              case 5: KutuphaneSistemi.kitapGeriVerme(); break;
+          value = print.nextInt();
+          switch (value) {
+              case 1: LibrarySystem.booksAdd(); break;
+              case 2: LibrarySystem.booksListing(); break;
+              case 3: LibrarySystem.membersAdd(); break;
+              case 4: LibrarySystem.booksBorrowing(); break;
+              case 5: LibrarySystem.booksReturning(); break;
               case 6: System.out.println("Sistemden Çıkış Yaptınız İyi Günler"); break;
               default: System.out.println("Geçersiz Seçim Tekrar Deneyiniz"); break;
           }

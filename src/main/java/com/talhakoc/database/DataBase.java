@@ -1,9 +1,8 @@
-package com.talhakoc.veritabani;
-import java.net.URL;
+package com.talhakoc.database;
 import java.sql.*;
 
-public class VeriTabani {
-    private static final String URL = "jdbc:mysql://localhost:3306/kutuphane";
+public class DataBase {
+    private static final String URL = "jdbc:mysql://localhost:3306/library";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 

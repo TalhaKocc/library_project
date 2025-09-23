@@ -1,15 +1,15 @@
-package com.talhakoc.kitap;
+package com.talhakoc.book;
 
-import com.talhakoc.veritabani.VeriTabani;
+import com.talhakoc.database.DataBase;
 
 import java.sql.*;
 import java.time.LocalDate;
 
-import static com.talhakoc.veritabani.VeriTabani.getConnection;
+import static com.talhakoc.database.DataBase.getConnection;
 
-public class Kitaplar {
+public class Books {
 
-    public static void kitapListele() {
+    public static void bookList() {
         Connection connection = getConnection();
 
         if (connection != null) {
@@ -35,7 +35,7 @@ public class Kitaplar {
         }
     }
 
-    public static void kitapEkle(String kitap_adi,String kitap_yazari,String kitap_durumu) {
+    public static void bookAdd(String kitap_adi,String kitap_yazari,String kitap_durumu) {
         String sql = "INSERT INTO kitaplar (kitap_adi,kitap_yazari,kitap_durumu) VALUES ( ?,?,?)";
 
         try (Connection connection = getConnection();
@@ -57,13 +57,13 @@ public class Kitaplar {
         }
     }
 
-    public static void  kitapOduncAl(String kitapAdi, String uyeAdi) {
+    public static void  bookBorrow(String kitapAdi, String uyeAdi) {
         String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
         String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
         String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Ödünç' WHERE kitap_id = ?";
         String sqlInsertOdunc = "INSERT INTO kitap_durumu (kitap_id, uye_id, odunc_tarihi) VALUES (?, ?, ?)";
 
-        try (Connection connection = VeriTabani.getConnection()) {
+        try (Connection connection = DataBase.getConnection()) {
             // 1️⃣ Kitap ve durumu
             PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
             psKitap.setString(1, kitapAdi);
@@ -110,13 +110,13 @@ public class Kitaplar {
         }
     }
 
-    public static void kitapİadeAlma(String kitapAdi, String uyeAdi) {
+    public static void bookReturn(String kitapAdi, String uyeAdi) {
         String sqlKitap = "SELECT kitap_id, kitap_durumu FROM kitaplar WHERE kitap_adi = ?";
         String sqlUye = "SELECT uye_id FROM uyeler WHERE uye_adi = ?";
         String sqlGuncelleKitap = "UPDATE kitaplar SET kitap_durumu = 'Müsait' WHERE kitap_id = ?";
         String sqlDeleteOdunc = "DELETE FROM kitap_durumu WHERE kitap_id = ? AND uye_id = ?";
 
-        try (Connection connection = VeriTabani.getConnection()) {
+        try (Connection connection = DataBase.getConnection()) {
             // Kitap id ve durumu
             PreparedStatement psKitap = connection.prepareStatement(sqlKitap);
             psKitap.setString(1, kitapAdi);
