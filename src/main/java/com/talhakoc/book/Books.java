@@ -12,7 +12,6 @@ public class Books {
 
     public static void bookList() {
         Connection connection = getConnection();
-
         if (connection != null) {
             try {
                 Statement stmt = connection.createStatement();

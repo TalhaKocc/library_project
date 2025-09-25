@@ -12,10 +12,8 @@ import java.util.Date;
 @Getter
 @Setter
 
-public class BooksStatusBean {
+public class BooksStatusBean extends BooksBean {
     private Long status_id;
-    private Long memberId;
-    private Long bookId;
     private Date statusDate;
 
 }
