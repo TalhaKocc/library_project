@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class BooksBean extends MembersBean {
+public class BooksBean{
     private Long bookId;
     private String bookName;
     private String bookAuthor;
