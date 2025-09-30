@@ -1,16 +1,80 @@
-package com.talhakoc.book;
-
-import com.talhakoc.database.DataBase;
-
+package com.talhakoc.model;
 import java.sql.*;
-import java.time.LocalDate;
 
-import static com.talhakoc.database.DataBase.getConnection;
+public class  DataBase{
+    private static final String url = "jdbc:mysql://localhost:3306/library";
+    private static final String username = "root";
+    private static final String password = "";
+
+    public static Connection getConnection(){
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(url,username,password);
+            System.out.println("database connected");
+
+        }catch (SQLException e){
+           e.printStackTrace();
+        }
+        return  connection;
+
+    }
+
+}
 
 
-public class Books {
 
-    public static void bookList() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+    private static String url = "jdbc:mysql://localhost:3306/library";
+    private static String user = "root";
+    private static String password = "";
+
+
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return connection;
+    }
+
+ */
+
+
+/*
+
+ public static void bookList() {
         Connection connection = getConnection();
         if (connection != null) {
             try {
@@ -162,7 +226,33 @@ public class Books {
         }
     }
 
-}
+ */
+
+
+/*
+
+public static void membersAdd(String member_name) {
+        String sql = "INSERT INTO members (member_name) VALUES (?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+
+            pstmt.setString(1,member_name);
+
+            int affectedLine = pstmt.executeUpdate();
+
+            if (affectedLine > 0) {
+                System.out.println("Yeni üye eklendi: "  + " (" + member_name + ")");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+ */
+
 
 
 

@@ -1,11 +1,20 @@
 package com.talhakoc.main;
 
-import com.talhakoc.system.LibrarySystem;
 
-import java.util.Scanner;
 
-public class Main extends LibrarySystem {
+import com.talhakoc.model.Books;
+import com.talhakoc.model.DataBase;
+import com.talhakoc.pojo.BooksBean;
+
+public class Main {
     public static void main(String[] args) {
+
+
+
+    }
+}
+
+  /*
         System.out.println("******** Kütüphane Sistemine Hoşgeldiniz *******");
         Scanner print = new Scanner(System.in);
         int value = 0;
@@ -30,10 +39,4 @@ public class Main extends LibrarySystem {
               default: System.out.println("Geçersiz Seçim Tekrar Deneyiniz"); break;
           }
       }
-
-
-
-
-    }
-}
-
+        */
