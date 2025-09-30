@@ -38,11 +38,11 @@ public class Books {
     public void booksAdd(BooksBean book){
 
         try(Connection connection = getConnection();
-            PreparedStatement pstmt = getConnection().prepareStatement(sqlBooksAdd))
+            PreparedStatement pstmt = connection.prepareStatement(sqlBooksAdd))
         {
             pstmt.setString(1,book.getBookName());
             pstmt.setString(2,book.getBookAuthor());
-            pstmt.setString(3,book.getBookStatus());
+            pstmt.setString(3,"Müsait");
 
             int effectedLines=pstmt.executeUpdate();
             if(effectedLines>0){

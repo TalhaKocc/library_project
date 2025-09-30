@@ -4,12 +4,14 @@ package com.talhakoc.main;
 
 import com.talhakoc.model.Books;
 import com.talhakoc.model.DataBase;
+import com.talhakoc.model.Members;
 import com.talhakoc.pojo.BooksBean;
 
 public class Main {
     public static void main(String[] args) {
 
-
+        Members members = new Members();
+        members.membersList();
 
     }
 }
