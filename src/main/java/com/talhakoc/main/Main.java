@@ -6,13 +6,15 @@ import com.talhakoc.model.Books;
 import com.talhakoc.model.DataBase;
 import com.talhakoc.model.Members;
 import com.talhakoc.pojo.BooksBean;
+import com.talhakoc.pojo.MembersBean;
 
 public class Main {
     public static void main(String[] args) {
 
-        Members members = new Members();
-        members.membersList();
-
+        MembersBean memberBean = new MembersBean();
+        memberBean.setMemberName("Hasan Tosun");
+        Members member = new Members();
+        member.membersAdd(memberBean);
     }
 }
 

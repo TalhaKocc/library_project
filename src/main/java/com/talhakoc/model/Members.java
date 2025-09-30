@@ -28,7 +28,23 @@ public class Members{
         }
     }
 
+    private String sqlMembersAdd = "INSERT INTO members(member_name) VALUES(?) ";
+    public void membersAdd(MembersBean member){
 
+        try(Connection connection = getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sqlMembersAdd))
+        {
+            pstmt.setString(1,member.getMemberName());
+
+            int effectedLines=pstmt.executeUpdate();
+            if(effectedLines>0){
+                System.out.println("Member added Successfully");
+            }
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 }
