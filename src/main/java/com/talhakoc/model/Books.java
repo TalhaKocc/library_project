@@ -2,6 +2,8 @@
 package com.talhakoc.model;
 
 import com.talhakoc.pojo.BooksBean;
+import com.talhakoc.pojo.BooksStatusBean;
+import com.talhakoc.pojo.MembersBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,12 +18,11 @@ import static com.talhakoc.model.DataBase.getConnection;
 public class Books {
 
     private String sqlBooksList="SELECT * FROM books";
-    public void bookList(){
+    public void bookList(BooksBean book){
         try(Connection connection = getConnection();
             PreparedStatement pstmt =connection.prepareStatement(sqlBooksList);
             ResultSet rs=pstmt.executeQuery(); ) {
             while(rs.next()){
-                BooksBean book=new BooksBean();
                 book.setBookId(rs.getLong("book_id"));
                 book.setBookName(rs.getString("book_name"));
                 book.setBookAuthor(rs.getString("book_author"));
@@ -49,6 +50,37 @@ public class Books {
                 System.out.println("Books added Successfully");
             }
 
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private String sqlBook = "SELECT book_id, book_status FROM books WHERE book_name = ?";
+    private String sqlMember = "SELECT member_id FROM members WHERE member_name = ?";
+    private String sqlUpdateBook = "UPDATE books SET book_status = 'Ödünç' WHERE book_id = ?";
+    private String sqlInsertBook = "INSERT INTO books_status (book_id, member_id, status_date) VALUES (?, ?, ?)";
+
+    public void bookBorrow(BooksBean book, MembersBean member, BooksStatusBean  status){
+        try(Connection connection = getConnection();)
+        {
+            PreparedStatement psbook = connection.prepareStatement(sqlBook);
+            ResultSet rs = psbook.executeQuery();
+            psbook.setString(1, book.getBookName());
+            if(rs.next()){
+                book.setBookId(rs.getLong("book_id"));
+                book.setBookStatus(rs.getString("book_status"));
+                if(book.getBookStatus().equals("Müsait")){
+                    PreparedStatement psmember = connection.prepareStatement(sqlMember);
+                    ResultSet rsmember=psmember.executeQuery();
+                    psmember.setString(1, member.getMemberName());
+                    if(rsmember.next()){
+                        member.setMemberId(rsmember.getLong("member_id"));
+                    }
+
+
+
+                }
+            }
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
