@@ -60,26 +60,46 @@ public class Books {
     private String sqlUpdateBook = "UPDATE books SET book_status = 'Ödünç' WHERE book_id = ?";
     private String sqlInsertBook = "INSERT INTO books_status (book_id, member_id, status_date) VALUES (?, ?, ?)";
 
-    public void bookBorrow(BooksBean book, MembersBean member, BooksStatusBean  status){
+    public void bookBorrow(BooksBean book, MembersBean member){
         try(Connection connection = getConnection();)
         {
             PreparedStatement psbook = connection.prepareStatement(sqlBook);
-            ResultSet rs = psbook.executeQuery();
             psbook.setString(1, book.getBookName());
+            ResultSet rs = psbook.executeQuery();
+
             if(rs.next()){
                 book.setBookId(rs.getLong("book_id"));
                 book.setBookStatus(rs.getString("book_status"));
+
                 if(book.getBookStatus().equals("Müsait")){
+
                     PreparedStatement psmember = connection.prepareStatement(sqlMember);
-                    ResultSet rsmember=psmember.executeQuery();
                     psmember.setString(1, member.getMemberName());
+                    ResultSet rsmember = psmember.executeQuery();
+
                     if(rsmember.next()){
                         member.setMemberId(rsmember.getLong("member_id"));
+
+                        PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBook);
+                        psUpdate.setLong(1, book.getBookId());
+                        psUpdate.executeUpdate();
+
+                        PreparedStatement psBorrow = connection.prepareStatement(sqlInsertBook);
+                        psBorrow.setLong(1,book.getBookId());
+                        psBorrow.setLong(2,member.getMemberId());
+                        psBorrow.setDate(3,java.sql.Date.valueOf(LocalDate.now()));
+                        psBorrow.executeUpdate();
+
+                        System.out.println("Kitap Ödünç Alındı");
+                    }else {
+                        System.out.println("Üye bulunamadı");
                     }
 
-
-
+                }else {
+                    System.out.println("Kitap Ödünç Durumda ");
                 }
+            }else {
+                System.out.println("Kitap bulunamadı");
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());

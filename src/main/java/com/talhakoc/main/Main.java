@@ -11,10 +11,19 @@ import com.talhakoc.pojo.MembersBean;
 public class Main {
     public static void main(String[] args) {
 
-        MembersBean memberBean = new MembersBean();
-        memberBean.setMemberName("Hasan Tosun");
-        Members member = new Members();
-        member.membersAdd(memberBean);
+       MembersBean membersBean = new MembersBean();
+       BooksBean booksBean = new BooksBean();
+       Books  books = new Books();
+       booksBean.setBookName("Kavgam");
+       membersBean.setMemberName("Talha Koç");
+
+
+       books.bookBorrow(booksBean,membersBean);
+
+
+
+
+
 
     }
 }
