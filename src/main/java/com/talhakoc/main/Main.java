@@ -18,7 +18,7 @@ public class Main {
        membersBean.setMemberName("Talha Koç");
 
 
-       books.bookBorrow(booksBean,membersBean);
+       books.bookReturn(booksBean,membersBean);
 
 
 

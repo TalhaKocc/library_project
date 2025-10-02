@@ -105,6 +105,60 @@ public class Books {
             System.out.println(e.getMessage());
         }
     }
+
+    private String sqlBookReturn = "SELECT book_id, book_status FROM books WHERE book_name = ?";
+    private String sqlMemberReturn = "SELECT member_id FROM members WHERE member_name = ?";
+    private String sqlUpdateBookReturn = "UPDATE books SET book_status = 'Müsait' WHERE book_id = ?";
+    private String sqlDeleteReturn = "DELETE FROM books_status WHERE book_id = ? AND member_id = ?";
+
+    public void bookReturn(BooksBean book, MembersBean member){
+        try (Connection connection = getConnection()){
+
+            PreparedStatement psbook = connection.prepareStatement(sqlBookReturn);
+            psbook.setString(1, book.getBookName());
+            ResultSet rs = psbook.executeQuery();
+            if(rs.next()){
+                book.setBookId(rs.getLong("book_id"));
+                book.setBookStatus(rs.getString("book_status"));
+
+                if(book.getBookStatus().equals("Ödünç")){
+                    PreparedStatement psmember = connection.prepareStatement(sqlMemberReturn);
+                    psmember.setString(1, member.getMemberName());
+                    ResultSet rsmember = psmember.executeQuery();
+
+                    if(rsmember.next()){
+                        member.setMemberId(rsmember.getLong("member_id"));
+
+                        PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBookReturn);
+                        psUpdate.setLong(1, book.getBookId());
+                        psUpdate.executeUpdate();
+
+                        PreparedStatement psReturn = connection.prepareStatement(sqlDeleteReturn);
+                        psReturn.setLong(1,book.getBookId() );
+                        psReturn.setLong(2,member.getMemberId() );
+                        psReturn.executeUpdate();
+                        System.out.println("Kitap Geri Alındı");
+
+                    }else {
+                        System.out.println("Üye Bulunamadı");
+                    }
+
+                }else {
+                    System.out.println("Kitap Zaten Müsait");
+                }
+
+
+            }else {
+                System.out.println("Kitap Bulunamadı");
+            }
+
+
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
 }
 
 
