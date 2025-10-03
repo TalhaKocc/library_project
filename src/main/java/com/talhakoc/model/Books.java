@@ -1,6 +1,7 @@
 
 package com.talhakoc.model;
 
+import com.talhakoc.DAO.BooksDAO;
 import com.talhakoc.pojo.BooksBean;
 import com.talhakoc.pojo.BooksStatusBean;
 import com.talhakoc.pojo.MembersBean;
@@ -15,10 +16,12 @@ import java.util.List;
 import static com.talhakoc.model.DataBase.getConnection;
 
 
-public class Books {
+public class Books implements BooksDAO {
 
     private String sqlBooksList="SELECT * FROM books";
-    public void bookList(){
+
+    @Override
+    public void booksList(){
         try(Connection connection = getConnection();
             PreparedStatement pstmt =connection.prepareStatement(sqlBooksList);
             ResultSet rs=pstmt.executeQuery(); ) {
@@ -37,6 +40,7 @@ public class Books {
     }
 
     private String sqlBooksAdd = "INSERT INTO books(book_name,book_author,book_status) VALUES(?,?,?) ";
+    @Override
     public void booksAdd(BooksBean book){
 
         try(Connection connection = getConnection();
@@ -61,7 +65,8 @@ public class Books {
     private String sqlUpdateBook = "UPDATE books SET book_status = 'Ödünç' WHERE book_id = ?";
     private String sqlInsertBook = "INSERT INTO books_status (book_id, member_id, status_date) VALUES (?, ?, ?)";
 
-    public void bookBorrow(BooksBean book, MembersBean member){
+    @Override
+    public void booksBorrow(BooksBean book, MembersBean member){
         try(Connection connection = getConnection();)
         {
             PreparedStatement psbook = connection.prepareStatement(sqlBook);
@@ -112,7 +117,8 @@ public class Books {
     private String sqlUpdateBookReturn = "UPDATE books SET book_status = 'Müsait' WHERE book_id = ?";
     private String sqlDeleteReturn = "DELETE FROM books_status WHERE book_id = ? AND member_id = ?";
 
-    public void bookReturn(BooksBean book, MembersBean member){
+    @Override
+    public void booksReturn(BooksBean book, MembersBean member){
         try (Connection connection = getConnection()){
 
             PreparedStatement psbook = connection.prepareStatement(sqlBookReturn);

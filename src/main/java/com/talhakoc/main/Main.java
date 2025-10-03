@@ -1,12 +1,5 @@
 package com.talhakoc.main;
 
-
-
-import com.talhakoc.model.Books;
-import com.talhakoc.model.DataBase;
-import com.talhakoc.model.Members;
-import com.talhakoc.pojo.BooksBean;
-import com.talhakoc.pojo.MembersBean;
 import com.talhakoc.service.LibrarySystem;
 
 import java.util.Scanner;
@@ -38,15 +31,5 @@ public class Main  {
             }
         }
 
-
-
-
-
-
-
     }
 }
-
-  /*
-
-        */

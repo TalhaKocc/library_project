@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class LibrarySystem {
    public static void  booksListing (){
        Books books = new Books();
-       books.bookList();
+       books.booksList();
    }
 
    public static void bookAdd(){
@@ -37,7 +37,7 @@ public class LibrarySystem {
         String memberName = input.nextLine();
         booksBean.setBookName(bookName);
         membersBean.setMemberName(memberName);
-        books.bookBorrow(booksBean,membersBean);
+        books.booksBorrow(booksBean,membersBean);
     }
 
     public static void bookReturning(){
@@ -51,7 +51,7 @@ public class LibrarySystem {
         String memberName = input.nextLine();
         booksBean.setBookName(bookName);
         membersBean.setMemberName(memberName);
-        books.bookReturn(booksBean,membersBean);
+        books.booksReturn(booksBean,membersBean);
     }
 
     public static void memberAdd(){

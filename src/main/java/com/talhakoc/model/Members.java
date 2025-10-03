@@ -1,6 +1,7 @@
 package com.talhakoc.model;
 
 
+import com.talhakoc.DAO.MemebersDAO;
 import com.talhakoc.pojo.BooksBean;
 import com.talhakoc.pojo.MembersBean;
 
@@ -9,9 +10,10 @@ import java.sql.*;
 import static com.talhakoc.model.DataBase.getConnection;
 
 
-public class Members{
+public class Members implements MemebersDAO {
 
     private String sqlMembersList="SELECT * FROM members";
+    @Override
     public void membersList(){
         try(Connection connection = getConnection();
             PreparedStatement pstmt =connection.prepareStatement(sqlMembersList);
@@ -29,6 +31,7 @@ public class Members{
     }
 
     private String sqlMembersAdd = "INSERT INTO members(member_name) VALUES(?) ";
+    @Override
     public void membersAdd(MembersBean member){
 
         try(Connection connection = getConnection();
