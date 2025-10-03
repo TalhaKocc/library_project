@@ -1,19 +1,14 @@
 
-package com.talhakoc.model;
+package com.library.model;
 
-import com.talhakoc.DAO.BooksDAO;
-import com.talhakoc.pojo.BooksBean;
-import com.talhakoc.pojo.BooksStatusBean;
-import com.talhakoc.pojo.MembersBean;
-import lombok.Getter;
-import lombok.Setter;
+import com.library.dao.BooksDAO;
+import com.library.pojo.BooksBean;
+import com.library.pojo.MembersBean;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.talhakoc.model.DataBase.getConnection;
+import static com.library.model.DataBase.getConnection;
 
 
 public class Books implements BooksDAO {

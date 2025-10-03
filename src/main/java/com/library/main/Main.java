@@ -1,6 +1,6 @@
-package com.talhakoc.main;
+package com.library.main;
 
-import com.talhakoc.service.LibrarySystem;
+import com.library.service.LibrarySystem;
 
 import java.util.Scanner;
 

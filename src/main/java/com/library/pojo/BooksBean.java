@@ -1,4 +1,4 @@
-package com.talhakoc.pojo;
+package com.library.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 
 public class BooksBean{
-    private Long bookId;
-    private String bookName;
-    private String bookAuthor;
-    private String bookStatus;
+    private Long id;
+    private String name;
+    private String author;
+    private String status;
 }
 
 

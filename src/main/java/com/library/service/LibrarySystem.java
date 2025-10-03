@@ -1,9 +1,9 @@
-package com.talhakoc.service;
+package com.library.service;
 
-import com.talhakoc.model.Books;
-import com.talhakoc.model.Members;
-import com.talhakoc.pojo.BooksBean;
-import com.talhakoc.pojo.MembersBean;
+import com.library.model.Books;
+import com.library.model.Members;
+import com.library.pojo.BooksBean;
+import com.library.pojo.MembersBean;
 
 import java.util.Scanner;
 

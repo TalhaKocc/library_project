@@ -1,13 +1,12 @@
-package com.talhakoc.model;
+package com.library.model;
 
 
-import com.talhakoc.DAO.MemebersDAO;
-import com.talhakoc.pojo.BooksBean;
-import com.talhakoc.pojo.MembersBean;
+import com.library.dao.MemebersDAO;
+import com.library.pojo.MembersBean;
 
 import java.sql.*;
 
-import static com.talhakoc.model.DataBase.getConnection;
+import static com.library.model.DataBase.getConnection;
 
 
 public class Members implements MemebersDAO {

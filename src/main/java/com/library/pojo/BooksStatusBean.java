@@ -1,4 +1,4 @@
-package com.talhakoc.pojo;
+package com.library.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,9 +13,9 @@ import java.util.Date;
 @Setter
 
 public class BooksStatusBean {
-    private Long statusId;
+    private Long id;
     private BooksBean book;
     private MembersBean member;
-    private Date statusDate;
+    private Date date;
 
 }

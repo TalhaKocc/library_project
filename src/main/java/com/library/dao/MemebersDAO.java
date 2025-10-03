@@ -1,6 +1,6 @@
-package com.talhakoc.DAO;
+package com.library.dao;
 
-import com.talhakoc.pojo.MembersBean;
+import com.library.pojo.MembersBean;
 
 public interface MemebersDAO {
     public void membersList();

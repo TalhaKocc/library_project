@@ -1,4 +1,4 @@
-package com.talhakoc.model;
+package com.library.model;
 import java.sql.*;
 
 public class  DataBase{

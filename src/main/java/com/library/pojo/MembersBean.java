@@ -1,4 +1,4 @@
-package com.talhakoc.pojo;
+package com.library.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 
 public class MembersBean {
-    private Long memberId;
-    private String memberName;
+    private Long id;
+    private String name;
 
 }
