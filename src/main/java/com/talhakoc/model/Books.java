@@ -18,11 +18,12 @@ import static com.talhakoc.model.DataBase.getConnection;
 public class Books {
 
     private String sqlBooksList="SELECT * FROM books";
-    public void bookList(BooksBean book){
+    public void bookList(){
         try(Connection connection = getConnection();
             PreparedStatement pstmt =connection.prepareStatement(sqlBooksList);
             ResultSet rs=pstmt.executeQuery(); ) {
             while(rs.next()){
+                BooksBean book = new BooksBean();
                 book.setBookId(rs.getLong("book_id"));
                 book.setBookName(rs.getString("book_name"));
                 book.setBookAuthor(rs.getString("book_author"));
