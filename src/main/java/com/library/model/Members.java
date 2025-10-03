@@ -1,7 +1,7 @@
 package com.library.model;
 
 
-import com.library.dao.MemebersDAO;
+import com.library.dao.MembersDAO;
 import com.library.pojo.MembersBean;
 
 import java.sql.*;
@@ -9,19 +9,19 @@ import java.sql.*;
 import static com.library.model.DataBase.getConnection;
 
 
-public class Members implements MemebersDAO {
+public class Members implements MembersDAO {
 
-    private String sqlMembersList="SELECT * FROM members";
+    private String sqlListMembers="SELECT * FROM members";
     @Override
-    public void membersList(){
+    public void listMembers(){
         try(Connection connection = getConnection();
-            PreparedStatement pstmt =connection.prepareStatement(sqlMembersList);
+            PreparedStatement pstmt =connection.prepareStatement(sqlListMembers);
             ResultSet rs=pstmt.executeQuery(); ) {
             while(rs.next()){
                 MembersBean member = new MembersBean();
-                member.setMemberId(rs.getLong("member_id"));
-                member.setMemberName(rs.getString("member_name"));
-                System.out.println("Üye " +member.getMemberId() +" "+ member.getMemberName());
+                member.setId(rs.getLong("member_id"));
+                member.setName(rs.getString("member_name"));
+                System.out.println("Üye " +member.getId() +" "+ member.getName());
             }
 
         }catch (SQLException e){
@@ -31,12 +31,12 @@ public class Members implements MemebersDAO {
 
     private String sqlMembersAdd = "INSERT INTO members(member_name) VALUES(?) ";
     @Override
-    public void membersAdd(MembersBean member){
+    public void addMembers(MembersBean member){
 
         try(Connection connection = getConnection();
             PreparedStatement pstmt = connection.prepareStatement(sqlMembersAdd))
         {
-            pstmt.setString(1,member.getMemberName());
+            pstmt.setString(1,member.getName());
 
             int effectedLines=pstmt.executeUpdate();
             if(effectedLines>0){

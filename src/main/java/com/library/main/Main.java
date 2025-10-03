@@ -21,11 +21,11 @@ public class Main  {
                     "Seçiminiz: ");
             value = print.nextInt();
             switch (value) {
-                case 1: LibrarySystem.bookAdd(); break;
-                case 2: LibrarySystem.booksListing(); break;
-                case 3: LibrarySystem.memberAdd(); break;
-                case 4: LibrarySystem.bookBorrowing(); break;
-                case 5: LibrarySystem.bookReturning(); break;
+                case 1: LibrarySystem.addBook(); break;
+                case 2: LibrarySystem.listBook(); break;
+                case 3: LibrarySystem.addMember(); break;
+                case 4: LibrarySystem.borrowBook(); break;
+                case 5: LibrarySystem.returnBook(); break;
                 case 6: System.out.println("Sistemden Çıkış Yaptınız İyi Günler"); break;
                 default: System.out.println("Geçersiz Seçim Tekrar Deneyiniz"); break;
             }

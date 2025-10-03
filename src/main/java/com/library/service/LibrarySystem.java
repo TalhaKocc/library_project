@@ -8,12 +8,12 @@ import com.library.pojo.MembersBean;
 import java.util.Scanner;
 
 public class LibrarySystem {
-   public static void  booksListing (){
+   public static void  listBook(){
        Books books = new Books();
-       books.booksList();
+       books.listBooks();
    }
 
-   public static void bookAdd(){
+   public static void addBook(){
        Scanner input = new Scanner(System.in);
        Books books = new Books();
        BooksBean booksBean = new BooksBean();
@@ -21,12 +21,12 @@ public class LibrarySystem {
        String bookName = input.nextLine();
        System.out.print("Kitap Yazarı Giriniz: ");
        String bookAuthor = input.nextLine();
-       booksBean.setBookName(bookName);
-       booksBean.setBookAuthor(bookAuthor);
-       books.booksAdd(booksBean);
+       booksBean.setName(bookName);
+       booksBean.setAuthor(bookAuthor);
+       books.addBooks(booksBean);
    }
 
-    public static void bookBorrowing(){
+    public static void borrowBook(){
         Scanner input = new Scanner(System.in);
         BooksBean booksBean = new BooksBean();
         Books books = new Books();
@@ -35,12 +35,12 @@ public class LibrarySystem {
         String bookName = input.nextLine();
         System.out.println("Üye Adı Giriniz: ");
         String memberName = input.nextLine();
-        booksBean.setBookName(bookName);
-        membersBean.setMemberName(memberName);
-        books.booksBorrow(booksBean,membersBean);
+        booksBean.setName(bookName);
+        membersBean.setName(memberName);
+        books.borrowBooks(booksBean,membersBean);
     }
 
-    public static void bookReturning(){
+    public static void returnBook(){
         Scanner input = new Scanner(System.in);
         BooksBean booksBean = new BooksBean();
         MembersBean membersBean = new MembersBean();
@@ -49,19 +49,24 @@ public class LibrarySystem {
         String bookName = input.nextLine();
         System.out.println("Üye Adı Giriniz: ");
         String memberName = input.nextLine();
-        booksBean.setBookName(bookName);
-        membersBean.setMemberName(memberName);
-        books.booksReturn(booksBean,membersBean);
+        booksBean.setName(bookName);
+        membersBean.setName(memberName);
+        books.returnBooks(booksBean,membersBean);
     }
 
-    public static void memberAdd(){
+    public static void listMember(){
         Scanner input = new Scanner(System.in);
         MembersBean membersBean = new MembersBean();
         Members  members = new Members();
         System.out.print("Üye Adı Giriniz: ");
         String memberName = input.nextLine();
-        membersBean.setMemberName(memberName);
-        members.membersAdd(membersBean);
+        membersBean.setName(memberName);
+        members.addMembers(membersBean);
+    }
+
+    public static void addMember(){
+       Members members = new Members();
+       members.listMembers();
     }
 }
 

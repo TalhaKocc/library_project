@@ -13,20 +13,20 @@ import static com.library.model.DataBase.getConnection;
 
 public class Books implements BooksDAO {
 
-    private String sqlBooksList="SELECT * FROM books";
+    private String sqlListBooks="SELECT * FROM books";
 
     @Override
-    public void booksList(){
+    public void listBooks(){
         try(Connection connection = getConnection();
-            PreparedStatement pstmt =connection.prepareStatement(sqlBooksList);
+            PreparedStatement pstmt =connection.prepareStatement(sqlListBooks);
             ResultSet rs=pstmt.executeQuery(); ) {
             while(rs.next()){
                 BooksBean book = new BooksBean();
-                book.setBookId(rs.getLong("book_id"));
-                book.setBookName(rs.getString("book_name"));
-                book.setBookAuthor(rs.getString("book_author"));
-                book.setBookStatus(rs.getString("book_status"));
-                System.out.println("Kitap " +book.getBookId() +" "+ book.getBookName()+" " + book.getBookAuthor()+" "+ book.getBookStatus());
+                book.setId(rs.getLong("book_id"));
+                book.setName(rs.getString("book_name"));
+                book.setAuthor(rs.getString("book_author"));
+                book.setStatus(rs.getString("book_status"));
+                System.out.println("Kitap " +book.getId() +" "+ book.getName()+" " + book.getAuthor()+" "+ book.getStatus());
             }
 
         }catch (SQLException e){
@@ -34,15 +34,15 @@ public class Books implements BooksDAO {
         }
     }
 
-    private String sqlBooksAdd = "INSERT INTO books(book_name,book_author,book_status) VALUES(?,?,?) ";
+    private String sqlAddBooks = "INSERT INTO books(book_name,book_author,book_status) VALUES(?,?,?) ";
     @Override
-    public void booksAdd(BooksBean book){
+    public void addBooks(BooksBean book){
 
         try(Connection connection = getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sqlBooksAdd))
+            PreparedStatement pstmt = connection.prepareStatement(sqlAddBooks))
         {
-            pstmt.setString(1,book.getBookName());
-            pstmt.setString(2,book.getBookAuthor());
+            pstmt.setString(1,book.getName());
+            pstmt.setString(2,book.getAuthor());
             pstmt.setString(3,"Müsait");
 
             int effectedLines=pstmt.executeUpdate();
@@ -61,33 +61,33 @@ public class Books implements BooksDAO {
     private String sqlInsertBook = "INSERT INTO books_status (book_id, member_id, status_date) VALUES (?, ?, ?)";
 
     @Override
-    public void booksBorrow(BooksBean book, MembersBean member){
+    public void borrowBooks(BooksBean book, MembersBean member){
         try(Connection connection = getConnection();)
         {
             PreparedStatement psbook = connection.prepareStatement(sqlBook);
-            psbook.setString(1, book.getBookName());
+            psbook.setString(1, book.getName());
             ResultSet rs = psbook.executeQuery();
 
             if(rs.next()){
-                book.setBookId(rs.getLong("book_id"));
-                book.setBookStatus(rs.getString("book_status"));
+                book.setId(rs.getLong("book_id"));
+                book.setStatus(rs.getString("book_status"));
 
-                if(book.getBookStatus().equals("Müsait")){
+                if(book.getStatus().equals("Müsait")){
 
                     PreparedStatement psmember = connection.prepareStatement(sqlMember);
-                    psmember.setString(1, member.getMemberName());
+                    psmember.setString(1, member.getName());
                     ResultSet rsmember = psmember.executeQuery();
 
                     if(rsmember.next()){
-                        member.setMemberId(rsmember.getLong("member_id"));
+                        member.setId(rsmember.getLong("member_id"));
 
                         PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBook);
-                        psUpdate.setLong(1, book.getBookId());
+                        psUpdate.setLong(1, book.getId());
                         psUpdate.executeUpdate();
 
                         PreparedStatement psBorrow = connection.prepareStatement(sqlInsertBook);
-                        psBorrow.setLong(1,book.getBookId());
-                        psBorrow.setLong(2,member.getMemberId());
+                        psBorrow.setLong(1,book.getId());
+                        psBorrow.setLong(2,member.getId());
                         psBorrow.setDate(3,java.sql.Date.valueOf(LocalDate.now()));
                         psBorrow.executeUpdate();
 
@@ -113,31 +113,31 @@ public class Books implements BooksDAO {
     private String sqlDeleteReturn = "DELETE FROM books_status WHERE book_id = ? AND member_id = ?";
 
     @Override
-    public void booksReturn(BooksBean book, MembersBean member){
+    public void returnBooks(BooksBean book, MembersBean member){
         try (Connection connection = getConnection()){
 
             PreparedStatement psbook = connection.prepareStatement(sqlBookReturn);
-            psbook.setString(1, book.getBookName());
+            psbook.setString(1, book.getName());
             ResultSet rs = psbook.executeQuery();
             if(rs.next()){
-                book.setBookId(rs.getLong("book_id"));
-                book.setBookStatus(rs.getString("book_status"));
+                book.setId(rs.getLong("book_id"));
+                book.setStatus(rs.getString("book_status"));
 
-                if(book.getBookStatus().equals("Ödünç")){
+                if(book.getStatus().equals("Ödünç")){
                     PreparedStatement psmember = connection.prepareStatement(sqlMemberReturn);
-                    psmember.setString(1, member.getMemberName());
+                    psmember.setString(1, member.getName());
                     ResultSet rsmember = psmember.executeQuery();
 
                     if(rsmember.next()){
-                        member.setMemberId(rsmember.getLong("member_id"));
+                        member.setId(rsmember.getLong("member_id"));
 
                         PreparedStatement psUpdate = connection.prepareStatement(sqlUpdateBookReturn);
-                        psUpdate.setLong(1, book.getBookId());
+                        psUpdate.setLong(1, book.getId());
                         psUpdate.executeUpdate();
 
                         PreparedStatement psReturn = connection.prepareStatement(sqlDeleteReturn);
-                        psReturn.setLong(1,book.getBookId() );
-                        psReturn.setLong(2,member.getMemberId() );
+                        psReturn.setLong(1,book.getId() );
+                        psReturn.setLong(2,member.getId() );
                         psReturn.executeUpdate();
                         System.out.println("Kitap Geri Alındı");
 
